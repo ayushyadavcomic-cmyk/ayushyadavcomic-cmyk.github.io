@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayush Yadav</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;1,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --bg2: #0d1224;
+    --surface: #111827;
+    --border: rgba(99,179,237,0.12);
+    --accent: #63b3ed;
+    --accent2: #7ee8a2;
+    --accent3: #f6ad55;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --glow: rgba(99,179,237,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 10%, rgba(99,179,237,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(126,232,162,0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Grid lines */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(99,179,237,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,179,237,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 0;
+    background: rgba(10,14,26,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  nav .inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-logo {
+    font-family: 'Crimson Pro', serif;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding-top: 80px;
+  }
+
+  .hero-inner {
+    width: 100%;
+  }
+
+  .hero-tag {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.6s 0.2s forwards;
+  }
+
+  .hero-name {
+    font-family: 'Crimson Pro', serif;
+    font-size: clamp(52px, 10vw, 90px);
+    font-weight: 300;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.3s forwards;
+  }
+
+  .hero-name span {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .hero-role {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.4s forwards;
+  }
+
+  .hero-role .dot {
+    color: var(--accent2);
+    margin: 0 8px;
+  }
+
+  .hero-bio {
+    font-family: 'Crimson Pro', serif;
+    font-size: 20px;
+    font-weight: 300;
+    color: #94a3b8;
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.5s forwards;
+  }
+
+  .hero-bio strong {
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.7s 0.6s forwards;
+  }
+
+  .btn {
+    padding: 10px 24px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+  }
+
+  .btn-primary:hover {
+    background: #90cdf4;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(99,179,237,0.3);
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--border);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--accent);
+    background: var(--glow);
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 80px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .about-text {
+    font-family: 'Crimson Pro', serif;
+    font-size: 18px;
+    font-weight: 300;
+    color: #94a3b8;
+    line-height: 1.8;
+  }
+
+  .about-text p + p { margin-top: 16px; }
+
+  .about-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .stat-item {
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .stat-item:hover {
+    border-color: rgba(99,179,237,0.3);
+    transform: translateX(4px);
+  }
+
+  .stat-num {
+    font-family: 'Crimson Pro', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .skill-card {
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: all 0.2s;
+    cursor: default;
+  }
+
+  .skill-card:hover {
+    border-color: rgba(99,179,237,0.35);
+    background: rgba(17,24,39,0.8);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+
+  .skill-icon {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  .skill-name {
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .skill-desc {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .skill-badge {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .badge-learning { background: rgba(246,173,85,0.15); color: var(--accent3); }
+  .badge-know { background: rgba(99,179,237,0.15); color: var(--accent); }
+  .badge-building { background: rgba(126,232,162,0.15); color: var(--accent2); }
+
+  /* JOURNEY */
+  .journey-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  .journey-list::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 8px;
+    bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .journey-item {
+    display: flex;
+    gap: 24px;
+    padding-bottom: 36px;
+    position: relative;
+  }
+
+  .journey-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--accent);
+    flex-shrink: 0;
+    margin-top: 3px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .journey-dot.active {
+    background: var(--accent);
+    box-shadow: 0 0 12px rgba(99,179,237,0.5);
+  }
+
+  .journey-content {}
+
+  .journey-year {
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .journey-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .journey-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* CONTACT */
+  .contact-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .contact-text {
+    font-family: 'Crimson Pro', serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: #94a3b8;
+    line-height: 1.6;
+  }
+
+  .contact-text strong {
+    color: var(--text);
+    display: block;
+    font-size: 36px;
+    font-weight: 300;
+    margin-bottom: 12px;
+  }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 13px;
+    transition: all 0.2s;
+  }
+
+  .contact-link:hover {
+    border-color: rgba(99,179,237,0.35);
+    background: var(--glow);
+    transform: translateX(4px);
+  }
+
+  .contact-link-icon { font-size: 18px; }
+  .contact-link-label { color: var(--muted); font-size: 11px; }
+
+  /* FOOTER */
+  footer {
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    position: relative;
+    z-index: 1;
+  }
+
+  footer span { color: var(--accent); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* CURSOR BLINK */
+  .blink {
+    animation: blink 1.2s step-end infinite;
+    color: var(--accent);
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .about-grid, .contact-inner { grid-template-columns: 1fr; gap: 32px; }
+    .hero-name { font-size: 52px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="inner">
+    <div class="nav-logo">ay.dev</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#journey">Journey</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <p class="hero-tag">// hello world</p>
+      <h1 class="hero-name">Ayush <span>Yadav</span></h1>
+      <p class="hero-role">
+        Learning Python from IIT
+        <span class="dot">·</span>
+        NPTEL Learner
+        <span class="dot">·</span>
+        Delhi, India
+      </p>
+      <p class="hero-bio">
+        <strong>Curious mind, learning to code.</strong> Currently learning Python through IIT Ropar's Joy of Computing on NPTEL — building a foundation one line at a time.<span class="blink">_</span>
+      </p>
+      <div class="hero-actions">
+        <a href="#journey" class="btn btn-primary">My Journey</a>
+        <a href="#contact" class="btn btn-outline">Get In Touch</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <p class="section-label fade-in">01 — About</p>
+    <div class="about-grid fade-in">
+      <div class="about-text">
+        <p>
+          Hey! I'm Ayush, from <strong>Delhi</strong> — someone who caught the programming bug and hasn't looked back since.
+        </p>
+        <p>
+          Currently learning Python through <strong>Joy of Computing using Python</strong> by IIT Ropar on NPTEL. 12 weeks of logic, problem-solving, and building real things.
+        </p>
+        <p>
+          I believe the best way to learn is by building things. Even if they break. Especially if they break.
+        </p>
+      </div>
+      <div class="about-stats">
+        <div class="stat-item">
+          <div class="stat-num">12</div>
+          <div class="stat-label">Weeks of NPTEL Python</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Lines of code left to write</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">1</div>
+          <div class="stat-label">Goal: become a developer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <p class="section-label fade-in">02 — Skills</p>
+    <div class="skills-grid fade-in">
+      <div class="skill-card">
+        <div class="skill-icon">🐍</div>
+        <div class="skill-name">Python</div>
+        <div class="skill-desc">Learning through NPTEL IIT Ropar. Basics to logic building.</div>
+        <span class="skill-badge badge-learning">Learning</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">💻</div>
+        <div class="skill-name">Problem Solving</div>
+        <div class="skill-desc">Breaking down problems, thinking logically, building step by step.</div>
+        <span class="skill-badge badge-building">Growing</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">🌐</div>
+        <div class="skill-name">HTML / CSS</div>
+        <div class="skill-desc">Web basics — structure and style. Getting comfortable.</div>
+        <span class="skill-badge badge-know">Know basics</span>
+      </div>
+      <div class="skill-card">
+        <div class="skill-icon">🔍</div>
+        <div class="skill-name">Curiosity</div>
+        <div class="skill-desc">Always asking "how does this work?" — my biggest skill.</div>
+        <span class="skill-badge badge-building">Mastered</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- JOURNEY -->
+<section id="journey">
+  <div class="container">
+    <p class="section-label fade-in">03 — Journey</p>
+    <div class="journey-list fade-in">
+      <div class="journey-item">
+        <div class="journey-dot active"></div>
+        <div class="journey-content">
+          <p class="journey-year">2026 — Present</p>
+          <p class="journey-title">NPTEL: Joy of Computing using Python</p>
+          <p class="journey-desc">Enrolled in IIT Ropar's Python course via SWAYAM-NPTEL. 12-week program starting July 2026. Learning programming fundamentals through real problem-solving.</p>
+        </div>
+      </div>
+      <div class="journey-item">
+        <div class="journey-dot"></div>
+        <div class="journey-content">
+          <p class="journey-year">Next</p>
+          <p class="journey-title">Building things with Python 🚀</p>
+          <p class="journey-desc">Projects, assignments, and maybe something cool along the way. Stay tuned.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <p class="section-label fade-in">04 — Contact</p>
+    <div class="contact-inner fade-in">
+      <div class="contact-text">
+        <strong>Let's connect.</strong>
+        I'm always up for learning, collaborating, or just talking about tech and code.
+      </div>
+      <div class="contact-links">
+        <a href="mailto:ayushyadavcomic@gmail.com" class="contact-link">
+          <span class="contact-link-icon">✉️</span>
+          <div>
+            <div>ayushyadavcomic@gmail.com</div>
+            <div class="contact-link-label">Email</div>
+          </div>
+        </a>
+        <a href="https://instagram.com/f1AYUSHYADAV" target="_blank" class="contact-link">
+          <span class="contact-link-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="ig" cx="30%" cy="107%" r="150%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="url(#ig)"/><circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="1.8" fill="none"/><circle cx="17.5" cy="6.5" r="1.2" fill="white"/></svg></span>
+          <div>
+            <div>@f1AYUSHYADAV</div>
+            <div class="contact-link-label">Instagram</div>
+          </div>
+        </a>
+        <a href="https://x.com/Dcayushyadav" target="_blank" class="contact-link">
+          <span class="contact-link-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.736-8.857L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></span>
+          <div>
+            <div>@Dcayushyadav</div>
+            <div class="contact-link-label">X (Twitter)</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <p>Built with curiosity by <span>Ayush Yadav</span> · Delhi, India · 2026</p>
+  </div>
+</footer>
+
+<script>
+  // Scroll animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
